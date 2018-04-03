@@ -1,37 +1,41 @@
-## Welcome to GitHub Pages
+---
+layout: default
+---
 
-You can use the [editor on GitHub](https://github.com/RJEGR/Transcriptomics/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+De novo transcriptome assembly is the _de novo_ sequence assembly method of creating a transcriptome without the aid of a reference genome (wikipedia). The availability of Next Generation Sequencing (NGS) technologies allows researchers to capture the spatial or temporal profile of gene expresion from a huge types of biological samples. The Following markdown describe an integrative workflow analysis in RNA-seq data based on the current bioinformatic methods.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+> -Ricardo Gore
 
-### Markdown
+## Outlines
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+* [Processing Raw libraries ](./markdown/Processing).
+* [Running Trinity ](./markdown/denovo-Assembly).
+* [Transrating Assembly ](./markdown/transrate).
+* [Annotation ](./markdown/trinotate).
+* [Abundance ](./markdown/RSEM).
+* [Differential Expression ](./markdown/DiffExp).
+* [Functional Annotation ](./markdown/DE-ontology).
 
-```markdown
-Syntax highlighted code block
+Text can be **bold**, _italic_, or ~~strikethrough~~.
 
-# Header 1
-## Header 2
-### Header 3
+There should be whitespace between paragraphs.
 
-- Bulleted
-- List
+There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
 
-1. Numbered
-2. List
+### Flow-analysis diagram
 
-**Bold** and _Italic_ and `Code` text
+![](./figures/step-step-analysis.png)
 
-[Link](url) and ![Image](src)
+
+Starts working on ssh serve
+```
+ssh user@omica
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+```
+Password: ******
+```
 
-### Jekyll Themes
+The Center for Scientific Research and Higher Education of Ensenada (CICESE), Mexico have a computer cluster [(Paper) ](http://todos.cicese.mx/sitio/noticia.php?n=827#.WsJ-23XwZhE) with many bioinformatic apps installed within ready to implement by subscribed users.  
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/RJEGR/Transcriptomics/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Please, email PhD A. Lago in order to request a cluster account (a prior authorization from your responsal)
