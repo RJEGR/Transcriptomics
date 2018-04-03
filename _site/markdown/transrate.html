@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+<!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Transcriptomic protocols | NGS protocols to wrangling Transcriptomics.</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Transcriptomic protocols" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="NGS protocols to wrangling Transcriptomics." />
+<meta property="og:description" content="NGS protocols to wrangling Transcriptomics." />
+<link rel="canonical" href="http://localhost:4000/markdown/transrate.html" />
+<meta property="og:url" content="http://localhost:4000/markdown/transrate.html" />
+<meta property="og:site_name" content="Transcriptomic protocols" />
+<script type="application/ld+json">
+{"description":"NGS protocols to wrangling Transcriptomics.","@type":"WebPage","url":"http://localhost:4000/markdown/transrate.html","headline":"Transcriptomic protocols","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <a href=""> <h1>Transcriptomic protocols</h1> </a>
+        <p>NGS protocols to wrangling Transcriptomics.</p>
+
+        
+
+        
+
+        
+          <ul>
+            <li><a href="">Download <strong>ZIP File</strong></a></li>
+            <li><a href="">Download <strong>TAR Ball</strong></a></li>
+            <li><a href="">View On <strong>GitHub</strong></a></li>
+          </ul>
+        
+      </header>
+      <section>
+
+      <p>La idea es cuantificar el rango de tipo de errores conocidos que ocurren durante el ensamble denovo de transcriptomas:</p>
+
+<p>Error type:</p>
+<ul>
+  <li>Family collapse (gene AA, AB, and AC collapsed as a single hybrid contig…bases in read as a disagrement in their entropy)</li>
+  <li>Chimeris (contig compuse from two disting transcripts (may or may not be related)…coverage is non uniform)</li>
+  <li>Unsupported insertion (the new contig contain a fragment inserted along them, therefore pseudo-contig have not good aligned…no reads align to insertion)</li>
+  <li>Incompletness (the contig lengh is small in comparison with the reads-gene where it came…read pairs align off end of contig)</li>
+  <li>Fragmentation (A transcript result in a small diferent set of contig …result in bridging reads pairs)</li>
+  <li>Local misassembly (transcript assembly is in a wrong orientation afer k-mering…read pairs in wrong orientation …These are detectable when both members of a read pair align to a single contig, but in a manner inconsistent with the sequencing protocol) &lt;– no detected in a non-strand mode setup</li>
+  <li>Redundancy (A transcript result in a diferent set of contigs … all reads assign to best contig)</li>
+</ul>
+
+<p><a href="https://genome.cshlp.org/content/early/2016/06/01/gr.196469.115.full.pdf+html">transrate paper</a></p>
+
+<p><img src="../figures/transrate.png" alt="" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/LUSTRE/bioinformatica_data/RNA/ricardo/bioinformatics/transrate-1.0.3-linux-x86_64/transrate
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./transrate <span class="se">\</span>
+    <span class="nt">--assembly</span> Trinity.fasta <span class="se">\</span>
+    <span class="nt">--left</span> R1.P.qtrim.fq <span class="se">\</span>
+    <span class="nt">--right</span> R2.P.qtrim.fq <span class="se">\</span>
+    <span class="nt">--threads</span> 96 <span class="se">\</span>
+    <span class="nt">--output</span> gcontigs 1&gt; transrate.log &amp;
+</code></pre></div></div>
+
+<h1 id="header-1"><a href="#header-1"></a>Header 1</h1>
+
+<p>This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.</p>
+
+<h2 id="header-2"><a href="#header-2"></a>Header 2</h2>
+
+<blockquote>
+  <p>This is a blockquote following a header.</p>
+
+  <p>When something is important enough, you do it even if the odds are not in your favor.</p>
+</blockquote>
+
+<h3 id="header-3"><a href="#header-3"></a>Header 3</h3>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Javascript code with syntax highlighting.</span>
+<span class="kd">var</span> <span class="nx">fun</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">lang</span><span class="p">(</span><span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">dateformat</span><span class="p">.</span><span class="nx">i18n</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./lang/'</span> <span class="o">+</span> <span class="nx">l</span><span class="p">)</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Ruby code with syntax highlighting</span>
+<span class="no">GitHubPages</span><span class="o">::</span><span class="no">Dependencies</span><span class="p">.</span><span class="nf">gems</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">gem</span><span class="p">,</span> <span class="n">version</span><span class="o">|</span>
+  <span class="n">s</span><span class="p">.</span><span class="nf">add_dependency</span><span class="p">(</span><span class="n">gem</span><span class="p">,</span> <span class="s2">"= </span><span class="si">#{</span><span class="n">version</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h4 id="header-4"><a href="#header-4"></a>Header 4</h4>
+
+<ul>
+  <li>This is an unordered list following a header.</li>
+  <li>This is an unordered list following a header.</li>
+  <li>This is an unordered list following a header.</li>
+</ul>
+
+<h5 id="header-5"><a href="#header-5"></a>Header 5</h5>
+
+<ol>
+  <li>This is an ordered list following a header.</li>
+  <li>This is an ordered list following a header.</li>
+  <li>This is an ordered list following a header.</li>
+</ol>
+
+<h6 id="header-6"><a href="#header-6"></a>Header 6</h6>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">head1</th>
+      <th style="text-align: left">head two</th>
+      <th style="text-align: left">three</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">ok</td>
+      <td style="text-align: left">good swedish fish</td>
+      <td style="text-align: left">nice</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">out of stock</td>
+      <td style="text-align: left">good and plenty</td>
+      <td style="text-align: left">nice</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ok</td>
+      <td style="text-align: left">good <code class="highlighter-rouge">oreos</code></td>
+      <td style="text-align: left">hmm</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ok</td>
+      <td style="text-align: left">good <code class="highlighter-rouge">zoute</code> drop</td>
+      <td style="text-align: left">yumm</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="theres-a-horizontal-rule-below-this">There’s a horizontal rule below this.</h3>
+
+<hr />
+
+<h3 id="here-is-an-unordered-list">Here is an unordered list:</h3>
+
+<ul>
+  <li>Item foo</li>
+  <li>Item bar</li>
+  <li>Item baz</li>
+  <li>Item zip</li>
+</ul>
+
+<h3 id="and-an-ordered-list">And an ordered list:</h3>
+
+<ol>
+  <li>Item one</li>
+  <li>Item two</li>
+  <li>Item three</li>
+  <li>Item four</li>
+</ol>
+
+<h3 id="and-a-nested-list">And a nested list:</h3>
+
+<ul>
+  <li>level 1 item
+    <ul>
+      <li>level 2 item</li>
+      <li>level 2 item
+        <ul>
+          <li>level 3 item</li>
+          <li>level 3 item</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="definition-lists-can-be-used-with-html-syntax">Definition lists can be used with HTML syntax.</h3>
+
+<dl>
+<dt>Name</dt>
+<dd>Godzilla</dd>
+<dt>Born</dt>
+<dd>1952</dd>
+<dt>Birthplace</dt>
+<dd>Japan</dd>
+<dt>Color</dt>
+<dd>Green</dd>
+</dl>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
+</code></pre></div></div>
+
+<p>Text can be <strong>bold</strong>, <em>italic</em>, or <del>strikethrough</del>.</p>
+
+<p><a href="../">back to Menu</a></p>
+
+<p><a href="another-page">Link to another page</a>.</p>
+
+
+      </section>
+      <footer>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+
+
+  
+  </body>
+</html>

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+<!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Transcriptomic protocols | NGS protocols to wrangling Transcriptomics.</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Transcriptomic protocols" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="NGS protocols to wrangling Transcriptomics." />
+<meta property="og:description" content="NGS protocols to wrangling Transcriptomics." />
+<link rel="canonical" href="http://localhost:4000/markdown/Processing.html" />
+<meta property="og:url" content="http://localhost:4000/markdown/Processing.html" />
+<meta property="og:site_name" content="Transcriptomic protocols" />
+<script type="application/ld+json">
+{"description":"NGS protocols to wrangling Transcriptomics.","@type":"WebPage","url":"http://localhost:4000/markdown/Processing.html","headline":"Transcriptomic protocols","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <a href=""> <h1>Transcriptomic protocols</h1> </a>
+        <p>NGS protocols to wrangling Transcriptomics.</p>
+
+        
+
+        
+
+        
+          <ul>
+            <li><a href="">Download <strong>ZIP File</strong></a></li>
+            <li><a href="">Download <strong>TAR Ball</strong></a></li>
+            <li><a href="">View On <strong>GitHub</strong></a></li>
+          </ul>
+        
+      </header>
+      <section>
+
+      <p><a href="../">back to Menu</a></p>
+
+<h1 id="-processing-raw-libraries"><a href="#header-1"></a> Processing Raw Libraries</h1>
+
+<p>Sanger sequencing perform a quality profile per nucleotide during sequencing as method to determine accuracy of the base calling position. It value is an <a href="https://en.wikipedia.org/wiki/Phred_quality_score">ASCII character called Phred score</a> and can be used to separete good from bad reads sequenced (<code class="highlighter-rouge">Phred &gt; Q score</code>). Phred quality scores Q 
+are defined as a property which is logarithmically correlated to the probabilities P of incorrect base-calling (Base call accuracy). For example, if Phred assigns a quality score of 30 to a base, the chances that this base is called incorrectly are 1 in 1000. This quality details can be found below each sequence line within any fastq file.</p>
+
+<p>Ussualy, errors during illumina sequencing are in the 5’ primer as high Q score whereas 3’ primer usually is degraded. Before starting your assembly you need to check and remove the set of low-quality sequence from your libraries as follow:</p>
+
+<ul>
+  <li>Quality Control
+    <ul>
+      <li>Checking Quality Control with <code class="highlighter-rouge">fastqc</code></li>
+      <li>Aggregate results with <code class="highlighter-rouge">multiqc</code></li>
+      <li>Remove low-quality sequence with <code class="highlighter-rouge">trimmomatic</code></li>
+    </ul>
+  </li>
+  <li>Screening composition of the libraries
+    <ul>
+      <li>Remove PhiX, Vectors or other contaminantes with <code class="highlighter-rouge">fastQ Screen</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="-fastqc"><a href="#header-2"></a> FastQC</h2>
+
+<p>FastQC aims to provide a simple way to do some quality control checks on raw sequence data coming from high throughput sequencing pipelines. It provides a modular set of analyses which you can use to give a quick impression of whether your data has any problems of which you should be aware before doing any further analysis.</p>
+
+<blockquote>
+  <p>To details visit Babraham Site <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">here</a></p>
+</blockquote>
+
+<p>It can be run easely through all your fastq libraries as follow:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir </span>fastqc
+<span class="nv">$ </span>srun <span class="nt">-n</span> 1 fastqc <span class="k">*</span>.gz <span class="nt">-t</span> 24 <span class="nt">-o</span> ./fastqc &amp;
+</code></pre></div></div>
+
+<h2 id="-multiqc"><a href="#header-2"></a> MultiQC</h2>
+
+<p>In addition, you can aggregate results from fastqc across all your libraries (<code class="highlighter-rouge">zip format</code>) into a single report using multiqc tool. And can be run as follow:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir </span>multiqc
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/LUSTRE/apps/Anaconda/conda2/bin:<span class="nv">$PATH</span>
+<span class="nv">$ </span><span class="nb">source </span>activate multiqc_py2.7
+<span class="nv">$ </span>multiqc ./fastqc/<span class="k">*</span>zip <span class="nt">-o</span> ./multiqc <span class="nt">--data-format</span> json <span class="nt">--export</span>
+</code></pre></div></div>
+
+<p>A complete example report coud be visualized in the next file <a href="../examples/raw_processing/multiqc_report.html">multiqc.html</a></p>
+
+<blockquote>
+  <p>To details visit site <a href="https://github.com/ewels/MultiQC">here</a></p>
+</blockquote>
+
+<h2 id="-trimmomatic"><a href="#header-2"></a> Trimmomatic</h2>
+
+<p>Trimmomatic performs a variety of useful trimming tasks for illumina paired-end and single ended data.The selection of trimming steps and their associated parameters are supplied on the command line. The follow syntaxis is configure to clip the adapter content for each library using the TruSeq3-PE; then, reads below the 36 bases long are dropped and average quality ≤ 25 are cutted within a sliding window of 5-bases. Also, 5-bases heads are cropped per read.</p>
+
+<blockquote>
+  <p>By default the value for $TRUSEQ refers to the path where the file TruSeq3-PE-2.fa is found. By default in: /home/rgomez within the cluster.</p>
+</blockquote>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/// loading Java current version
+<span class="nv">$ </span>module load jdk1.8.0_60
+<span class="nv">$ </span><span class="k">for </span>i <span class="k">in</span> <span class="k">$(</span><span class="nb">ls</span> <span class="k">*</span>gz | <span class="nb">grep </span>fastq<span class="k">)</span><span class="p">;</span> 
+<span class="k">do 
+  </span><span class="nv">FORWARD</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$i</span> | <span class="nb">grep </span>R1<span class="k">)</span><span class="p">;</span> <span class="se">\</span>
+  <span class="nv">REVERSE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$i</span> | <span class="nb">grep </span>R2<span class="k">)</span><span class="p">;</span> <span class="se">\</span>
+java <span class="nt">-jar</span> trimmomatic-0.36.jar PE <span class="nt">-phred33</span> <span class="se">\</span>
+      <span class="nv">$FORWARD</span> <span class="nv">$REVERSE</span> <span class="se">\</span>
+      <span class="k">${</span><span class="nv">FORWARD</span><span class="p">%.fastq.gz</span><span class="k">}</span>.P.qtrim.fq.gz <span class="k">${</span><span class="nv">FORWARD</span><span class="p">%.fastq.gz</span><span class="k">}</span>.UP.qtrim.fq.gz <span class="se">\</span>
+      <span class="k">${</span><span class="nv">REVERSE</span><span class="p">%.fastq.gz</span><span class="k">}</span>.P.qtrim.fq.gz <span class="k">${</span><span class="nv">REVERSE</span><span class="p">%.fastq.gz</span><span class="k">}</span>.UP.qtrim.fq.gz <span class="se">\</span>
+      ILLUMINACLIP:/LUSTRE/bioinformatica_data/genomica_funcional/rgomez/oyster-rawdata/trimmomatic/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:5:25 MINLEN:36
+</code></pre></div></div>
+
+<p>The current trimming steps are:</p>
+
+<ul>
+  <li>ILLUMINACLIP: Cut adapter and other illumina-specific sequences from the read.</li>
+  <li>SLIDINGWINDOW: Perform a sliding window trimming, cutting once the average quality within the window falls below a threshold.</li>
+  <li>HEADCROP: Cut the specified number of bases from the start of the read</li>
+  <li>MINLEN: Drop the read if it is below a specified length</li>
+</ul>
+
+<blockquote>
+  <p>To details visit site <a href="http://www.usadellab.org/cms/?page=trimmomatic">here</a></p>
+</blockquote>
+
+<blockquote>
+  <p>Trinity as embed the configuration to run trimmomatic automatically before the assembly; We prefer this way, but also you can run independently as code above or skip this part and run fastq Screen as final step before assembly.</p>
+</blockquote>
+
+<h2 id="-fastq-screen"><a href="#header-2"></a> FastQ Screen</h2>
+
+<p>FastQ Screen allows you to set up a standard set of libraries against which all of your sequences can be searched. Your search libraries might contain the genomes of all of the organisms you work on, along with PhiX, Vectors or other contaminants commonly seen in sequencing experiments.</p>
+
+<p>We recomend to integrate in this step the non redundant Univec database. UniVec is a database that can be used to quickly identify segments within nucleic acid sequences which may be of vector origin (vector contamination). In addition to vector sequences, UniVec also contains sequences for those adapters, linkers, and primers commonly used in the process of cloning cDNA or genomic DNA. This enables contamination with these oligonucleotide sequences to be found during the vector screen (Pati A. et al 2015).</p>
+
+<p>The follow table show the reference used in this step:</p>
+
+<hr />
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Reference</th>
+      <th style="text-align: left">Source</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Laboratory</td>
+      <td style="text-align: left">PhiX</td>
+      <td style="text-align: left">Enterobacterial Phage ( genome PhiX174)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">UniVec</td>
+      <td style="text-align: left">Adapters, common contaminant</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"><em>Homo Sapiens</em></td>
+      <td style="text-align: left">Human (genome versión 38)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"><em>Saccharomyce Cerevisiae</em></td>
+      <td style="text-align: left">Yeast</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For any dabase screening versus your libraries fastq Screen provide a tab-delimited configure file to set up the reference list of databases of your chose. Also, fastq screeen cat implement either, bowtie (used for sequences less than 100 bp ie. small RNAs) or bowtie2 (bw2 used in paired-end sequences round to 200 bp). In this way, you need to index your databases before modify the configure file as this example:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>srun bowtie2-build reference.fa reference &amp;
+</code></pre></div></div>
+<p>Finally, modify the configure file (dowload a template <a href="../examples/fastq_screen/fastq_screen.conf">here</a>) and then run the tool:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fastq_screen <span class="se">\</span>
+  <span class="nt">--aligner</span> bowtie2 <span class="se">\</span>
+  <span class="nt">--conf</span> fastq_screen.conf <span class="se">\</span>
+  <span class="nt">--nohits</span> <span class="se">\</span>
+  <span class="nt">--outdir</span> ./output Trimmed_2P.fastq
+</code></pre></div></div>
+<blockquote>
+  <p>To details in how to configure <code class="highlighter-rouge">fastq_screen</code> visit the Babraham Site <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/fastq_screen_documentation.html">here</a></p>
+</blockquote>
+
+<p>The grey bar from figure in below space shows than more than 90 % of reads had not hits with any from the reference used in the configure file. Those reads are saved in a file with <code class="highlighter-rouge">tagged_filter.fastq</code> extention and are requiered for Assembly step.</p>
+
+<p><img src="../examples/fastq_screen/example_screen_Seqs.png" alt="" /></p>
+
+<p><a href="../">back to Menu</a></p>
+
+<hr />
+
+
+      </section>
+      <footer>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+
+
+  
+  </body>
+</html>

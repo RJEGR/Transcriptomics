@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+<!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Transcriptomic protocols | NGS protocols to wrangling Transcriptomics.</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Transcriptomic protocols" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="NGS protocols to wrangling Transcriptomics." />
+<meta property="og:description" content="NGS protocols to wrangling Transcriptomics." />
+<link rel="canonical" href="http://localhost:4000/markdown/denovo-Assembly.html" />
+<meta property="og:url" content="http://localhost:4000/markdown/denovo-Assembly.html" />
+<meta property="og:site_name" content="Transcriptomic protocols" />
+<script type="application/ld+json">
+{"description":"NGS protocols to wrangling Transcriptomics.","@type":"WebPage","url":"http://localhost:4000/markdown/denovo-Assembly.html","headline":"Transcriptomic protocols","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <a href=""> <h1>Transcriptomic protocols</h1> </a>
+        <p>NGS protocols to wrangling Transcriptomics.</p>
+
+        
+
+        
+
+        
+          <ul>
+            <li><a href="">Download <strong>ZIP File</strong></a></li>
+            <li><a href="">Download <strong>TAR Ball</strong></a></li>
+            <li><a href="">View On <strong>GitHub</strong></a></li>
+          </ul>
+        
+      </header>
+      <section>
+
+      <p><a href="../">back to Menu</a></p>
+
+<p>Based on work from <a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-Trinity">this guy</a> we develope some technical adjustment in order to run trinity within the cluster at cicese. this page summarize the analysis for:</p>
+
+<ul>
+  <li>Configure sample file</li>
+  <li><em>Denovo</em> Assembly with Trinity</li>
+</ul>
+
+<h2 id="configure-sample-file"><a href="#header-2"></a>Configure sample file</h2>
+
+<p>Supose you’ve a set of five paired-end libraries than were processed as in <a href="Processing"> pre-procesing step page</a>; then, you want to assembly it with Trinity; lets write those in a tab-delimited text file indicating biological replicate relationships. You can make it using any spreadsheets tool (<em>excel, google etc.</em>) or use the code below than input the list of fastq files found within your <em>work directory</em> and use the name file per library for label the factors than expect be biological relationship indicator; then, separete those by forward (R1) and reverse (R2) ends:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="k">*</span>R2<span class="k">*</span> | <span class="nb">grep </span>fastq | <span class="nb">sort</span> <span class="o">&gt;</span> R2.tmp <span class="o">&amp;&amp;</span> <span class="nb">ls</span> <span class="k">*</span>R1<span class="k">*</span> | <span class="nb">grep </span>fastq | <span class="nb">sort</span> <span class="o">&gt;</span> R1.tmp <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">cut</span> <span class="nt">-d</span> <span class="s2">"-"</span> <span class="nt">-f1</span> R1.tmp <span class="o">&gt;</span> factors.tmp <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">cut</span> <span class="nt">-d</span> <span class="s2">"_"</span> <span class="nt">-f1</span> R1.tmp <span class="o">&gt;</span> codes.tmp <span class="o">&amp;&amp;</span> <span class="se">\</span>
+<span class="nb">paste </span>factors.tmp codes.tmp R1.tmp R2.tmp | <span class="nb">awk</span> <span class="s1">'{gsub(/\-/,"_",$2); \
+print $1,$2,$3,$4}'</span> | column <span class="nt">-t</span> <span class="o">&gt;</span> samples.file <span class="o">&amp;&amp;</span> <span class="nb">rm</span> <span class="k">*</span>tmp
+</code></pre></div></div>
+<p>As results, data in table below is printed in a file with name <em>samples.file</em>; which include two factor columns at beginning and the forward and reverse name of libraries in the last two columns.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Factor 1</th>
+      <th style="text-align: left">Factor 2</th>
+      <th style="text-align: left">Forward</th>
+      <th>Reverse</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">T0</td>
+      <td style="text-align: left">T0_1</td>
+      <td style="text-align: left">T0-1_S1_L001_R1.fastq.gz</td>
+      <td>T0-1_S1_L001_R2.fastq.gz</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">T1</td>
+      <td style="text-align: left">T1_100_1</td>
+      <td style="text-align: left">T1-100-1_S2_L001_R1.fastq.gz</td>
+      <td>T1-100-1_S2_L001_R2.fastq.gz</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">T1</td>
+      <td style="text-align: left">T1_200_1</td>
+      <td style="text-align: left">T1-200-1_S3_L001_R1.fastq.gz</td>
+      <td>T1-200-1_S3_L001_R2.fastq.gz</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">T3</td>
+      <td style="text-align: left">T3_100_1</td>
+      <td style="text-align: left">T3-100-1_S4_L001_R1.fastq.gz</td>
+      <td>T3-100-1_S4_L001_R2.fastq.gz</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">T3</td>
+      <td style="text-align: left">T3_200_1</td>
+      <td style="text-align: left">T3-200-1_S5_L001_R1.fastq.gz</td>
+      <td>T3-200-1_S5_L001_R1.fastq.gz</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>The sample file is very useful when want to assembly more than 2 libraries by writing all the datasets as one file during the Trinity command.</p>
+</blockquote>
+
+<p>Then, lets run the assembly including the trimmomatic step</p>
+
+<h2 id="-denovo-assembly-with-trinity"><a href="#header-2"></a> <em>Denovo</em> Assembly with Trinity</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Trinity <span class="nt">--seqType</span> fq <span class="nt">--max_memory</span> 100G <span class="se">\</span>
+         <span class="nt">--samples_file</span> samples.file <span class="se">\</span>
+         <span class="nt">--no_normalize_reads</span> <span class="se">\</span>
+         <span class="nt">--CPU</span> 24 <span class="se">\</span>
+         <span class="nt">--output</span> trinity_out <span class="se">\</span>
+         <span class="nt">--trimmomatic</span> <span class="se">\</span>
+         <span class="nt">--quality_trimming_params</span> <span class="s2">"ILLUMINACLIP:</span><span class="nv">$TRUSEQ</span><span class="s2">/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:5:25 MINLEN:36"</span>
+</code></pre></div></div>
+<blockquote>
+  <p>If you have especially large RNA-Seq data sets involving many hundreds of millions of reads to billions of reads, in silico normalization is a necessity.  as of Nov, 2016, in silico normalization in Trinity happens by default; then just turn off the <code class="highlighter-rouge">--no_normalize_reads</code> option if necessary or read details in the <a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-Trinity#assembling-large-rna-seq-data-sets-hundreds-of-millions-to-billions-of-reads">Trinity blog</a>.</p>
+
+  <p>To details with trimmomatic read the <a href="Processing">pre-procesing step page</a></p>
+</blockquote>
+
+<p>Finally, you can run the <code class="highlighter-rouge">TrinityStats.pl</code> from the trinity toolkit in order to determine the assembly quality and completeness by computing the Nx statistics.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TrinityStats.pl ./trinity_out/Trinity.fasta <span class="o">&gt;</span>&amp; trinityStats.log
+</code></pre></div></div>
+
+<p>Based on the lengths of the assembled transcriptome contigs, <code class="highlighter-rouge">TrinityStats</code> compute the Nx length statistic, such that at least x% of the assembled transcript nucleotides are found in contigs that are at least of Nx length. The traditional method is computing N50, such that at least half of all assembled bases are in transcript contigs of at least the N50 length value.</p>
+
+<p>As example, the trinityStats.log file is printed as follow:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':  61694
+Total trinity transcripts:      147454
+Percent GC: 39.21
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+        Contig N10: 2818
+        Contig N20: 2184
+        Contig N30: 1754
+        Contig N40: 1406
+        Contig N50: 1121
+
+        Median contig length: 465
+        Average contig: 737.28
+        Total assembled bases: 108715008
+
+
+#####################################################
+## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+#####################################################
+
+        Contig N10: 3048
+        Contig N20: 2350
+        Contig N30: 1892
+        Contig N40: 1509
+        Contig N50: 1178
+
+        Median contig length: 392
+        Average contig: 708.54
+        Total assembled bases: 43712872
+</code></pre></div></div>
+<p>The N10 through N50 values are shown computed based on all assembled contigs. In this example, 10% of the assembled bases are found in transcript contigs at least 2,818 bases in length (N10 value), and the N50 value indicates that at least half the assembled bases are found in contigs that are at least 1121 bases in length.</p>
+
+<p>The contig N50 values can often be exaggerated due to an assembly program generating too many transcript isoforms, especially for the longer transcripts. To mitigate this effect, the trinityStats script will also compute the Nx values based on using only the single longest isoform per ‘gene’.</p>
+
+<blockquote>
+  <p>Next step is inspect the assembly quality and completeness with TransRate (Smith-Unna et al., 2016) in order to compute the E90N50 values and contigs score components.</p>
+</blockquote>
+
+<p><a href="../">back to Menu</a></p>
+
+
+      </section>
+      <footer>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+
+
+  
+  </body>
+</html>
