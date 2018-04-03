@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-
+testing visual code-gitcraken and git connection
 De novo transcriptome assembly is the _de novo_ sequence assembly method of creating a transcriptome without the aid of a reference genome (wikipedia). The availability of Next Generation Sequencing (NGS) technologies allows researchers to capture the spatial or temporal profile of gene expresion from a huge types of biological samples. The Following markdown describe an integrative workflow analysis in RNA-seq data based on the current bioinformatic methods.
 
 > -Ricardo Gore
