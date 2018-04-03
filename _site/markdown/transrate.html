@@ -62,10 +62,29 @@
 
 <p><img src="../figures/transrate.png" alt="" /></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/LUSTRE/bioinformatica_data/RNA/ricardo/bioinformatics/transrate-1.0.3-linux-x86_64/transrate
+<p>Whinin your <em>work directory</em> lets make a new directory with name <em>transrate</em> and go in to start working in:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>transrate <span class="o">&amp;&amp;</span> <span class="nb">cd </span>transrate 
 </code></pre></div></div>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./transrate <span class="se">\</span>
+<p>Lets to use the command shell <code class="highlighter-rouge">ln -s</code> in order to make a symbolic link from the assembly with name Trinity.fasta:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ln</span> <span class="nt">-s</span> ../trinity_out/Trinity.fasta <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>Then, concatenate in a unique dataset the left and right libraries for input in transrate; both data sets are necessary for transrating:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zcat ../trinity_out/<span class="k">*</span>R1<span class="k">*</span>P.qtrim.gz <span class="o">&gt;</span> R1.P.qtrim.fq &amp;
+zcat ../trinity_out/<span class="k">*</span>R2<span class="k">*</span>P.qtrim.gz <span class="o">&gt;</span> R2.P.qtrim.fq 
+</code></pre></div></div>
+
+<p>Now export the source from the transrate tool; and finally run transrate (considere to use the sbatch task manager in the cluster)</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">tool</span><span class="o">=</span>/LUSTRE/bioinformatica_data/RNA/ricardo/bioinformatics/transrate-1.0.3-linux-x86_64/
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$tool</span>:<span class="nv">$PATH</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>transrate <span class="se">\</span>
     <span class="nt">--assembly</span> Trinity.fasta <span class="se">\</span>
     <span class="nt">--left</span> R1.P.qtrim.fq <span class="se">\</span>
     <span class="nt">--right</span> R2.P.qtrim.fq <span class="se">\</span>
@@ -73,48 +92,75 @@
     <span class="nt">--output</span> gcontigs 1&gt; transrate.log &amp;
 </code></pre></div></div>
 
-<h1 id="header-1"><a href="#header-1"></a>Header 1</h1>
+<p>The <code class="highlighter-rouge">transrate.log</code> file include some statistics like:</p>
 
-<p>This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ INFO] 2018-03-02 00:41:37 : Calculating contig metrics...
+[ INFO] 2018-03-02 00:41:56 : Contig metrics:
+[ INFO] 2018-03-02 00:41:56 : -----------------------------------
+[ INFO] 2018-03-02 00:41:56 : n seqs                       147454
+[ INFO] 2018-03-02 00:41:56 : smallest                        201
+[ INFO] 2018-03-02 00:41:56 : largest                       10795
+[ INFO] 2018-03-02 00:41:56 : n bases                   108715008
+[ INFO] 2018-03-02 00:41:56 : mean len                     737.28
+[ INFO] 2018-03-02 00:41:56 : n under 200                       0
+[ INFO] 2018-03-02 00:41:56 : n over 1k                     33509
+[ INFO] 2018-03-02 00:41:56 : n over 10k                        1
+[ INFO] 2018-03-02 00:41:56 : n with orf                    40996
+[ INFO] 2018-03-02 00:41:56 : mean orf percent              58.76
+[ INFO] 2018-03-02 00:41:56 : n90                             308
+[ INFO] 2018-03-02 00:41:56 : n70                             640
+[ INFO] 2018-03-02 00:41:56 : n50                            1121
+[ INFO] 2018-03-02 00:41:56 : n30                            1754
+[ INFO] 2018-03-02 00:41:56 : n10                            2818
+[ INFO] 2018-03-02 00:41:56 : gc                             0.39
+[ INFO] 2018-03-02 00:41:56 : bases n                           0
+[ INFO] 2018-03-02 00:41:56 : proportion n                    0.0
+[ INFO] 2018-03-02 00:41:56 : Contig metrics done in 19 seconds
+[ INFO] 2018-03-02 00:41:56 : Calculating read diagnostics...
+[ INFO] 2018-03-02 01:00:20 : Read mapping metrics:
+[ INFO] 2018-03-02 01:00:20 : -----------------------------------
+[ INFO] 2018-03-02 01:00:20 : fragments                  51394897
+[ INFO] 2018-03-02 01:00:20 : fragments mapped           19860500
+[ INFO] 2018-03-02 01:00:20 : p fragments mapped             0.39
+[ INFO] 2018-03-02 01:00:20 : good mappings              17246823
+[ INFO] 2018-03-02 01:00:20 : p good mapping                 0.34
+[ INFO] 2018-03-02 01:00:20 : bad mappings                2613677
+[ INFO] 2018-03-02 01:00:20 : potential bridges                 0
+[ INFO] 2018-03-02 01:00:20 : bases uncovered            68043780
+[ INFO] 2018-03-02 01:00:20 : p bases uncovered              0.63
+[ INFO] 2018-03-02 01:00:20 : contigs uncovbase            124374
+[ INFO] 2018-03-02 01:00:20 : p contigs uncovbase            0.84
+[ INFO] 2018-03-02 01:00:20 : contigs uncovered            147454
+[ INFO] 2018-03-02 01:00:20 : p contigs uncovered             1.0
+[ INFO] 2018-03-02 01:00:20 : contigs lowcovered           147454
+[ INFO] 2018-03-02 01:00:20 : p contigs lowcovered            1.0
+[ INFO] 2018-03-02 01:00:20 : contigs segmented             15457
+[ INFO] 2018-03-02 01:00:20 : p contigs segmented             0.1
+[ INFO] 2018-03-02 01:00:20 : Read metrics done in 1103 seconds
+[ INFO] 2018-03-02 01:00:20 : No reference provided, skipping comparative diagnostics
+[ INFO] 2018-03-02 01:00:40 : TRANSRATE ASSEMBLY SCORE     0.0297
+[ INFO] 2018-03-02 01:00:40 : -----------------------------------
+[ INFO] 2018-03-02 01:00:40 : TRANSRATE OPTIMAL SCORE       0.123
+[ INFO] 2018-03-02 01:00:40 : TRANSRATE OPTIMAL CUTOFF     0.2353
+[ INFO] 2018-03-02 01:00:41 : good contigs                  65516
+[ INFO] 2018-03-02 01:00:41 : p good contigs                 0.44
+[ INFO] 2018-03-02 01:00:41 : Writing contig metrics for each contig to /LUSTRE/bioinformatica_data/genomica_funcional/rgomez/oyster-rawdata/gonada_all_sex_vs_hc/transrate/gcontigs/Trinity/contigs.csv
+[ INFO] 2018-03-02 01:01:02 : Writing analysis results to assemblies.csv
 
-<h2 id="header-2"><a href="#header-2"></a>Header 2</h2>
-
-<blockquote>
-  <p>This is a blockquote following a header.</p>
-
-  <p>When something is important enough, you do it even if the odds are not in your favor.</p>
-</blockquote>
-
-<h3 id="header-3"><a href="#header-3"></a>Header 3</h3>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Javascript code with syntax highlighting.</span>
-<span class="kd">var</span> <span class="nx">fun</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">lang</span><span class="p">(</span><span class="nx">l</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">dateformat</span><span class="p">.</span><span class="nx">i18n</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./lang/'</span> <span class="o">+</span> <span class="nx">l</span><span class="p">)</span>
-  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-<span class="p">}</span>
 </code></pre></div></div>
+<p>The optimal cutoff from 0.2352 were calculated with transrate and used to keep good contigs assembled (from the total contigs 44% were considere as good).  Try comparing results with the <a href="denovo-Assembly">previous Assembly quality statistics</a> which came from the same set of libraries. Are there some difference ?</p>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Ruby code with syntax highlighting</span>
-<span class="no">GitHubPages</span><span class="o">::</span><span class="no">Dependencies</span><span class="p">.</span><span class="nf">gems</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">gem</span><span class="p">,</span> <span class="n">version</span><span class="o">|</span>
-  <span class="n">s</span><span class="p">.</span><span class="nf">add_dependency</span><span class="p">(</span><span class="n">gem</span><span class="p">,</span> <span class="s2">"= </span><span class="si">#{</span><span class="n">version</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre></div></div>
+<p>lets start into R</p>
 
-<h4 id="header-4"><a href="#header-4"></a>Header 4</h4>
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">contigs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">".gcontigs/Trinity/contigs.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">T</span><span class="p">)</span><span class="w">
 
-<ul>
-  <li>This is an unordered list following a header.</li>
-  <li>This is an unordered list following a header.</li>
-  <li>This is an unordered list following a header.</li>
-</ul>
+</span><span class="n">contigs</span><span class="p">[</span><span class="s1">'group'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NA</span><span class="w">
+</span><span class="n">contigs</span><span class="p">[</span><span class="n">which</span><span class="p">(</span><span class="n">contigs</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w">  </span><span class="m">0.0297</span><span class="p">),</span><span class="s1">'group'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s1">'Assembly Score'</span><span class="w">
+</span><span class="n">contigs</span><span class="p">[</span><span class="n">which</span><span class="p">(</span><span class="n">contigs</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w">  </span><span class="m">0.123</span><span class="p">),</span><span class="s1">'group'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s1">'Optimal Score'</span><span class="w">
+</span><span class="n">contigs</span><span class="p">[</span><span class="n">which</span><span class="p">(</span><span class="n">contigs</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="m">0.2353</span><span class="p">),</span><span class="s1">'group'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s1">'Optimal Cutoff'</span><span class="w">
 
-<h5 id="header-5"><a href="#header-5"></a>Header 5</h5>
-
-<ol>
-  <li>This is an ordered list following a header.</li>
-  <li>This is an ordered list following a header.</li>
-  <li>This is an ordered list following a header.</li>
-</ol>
+</span><span class="n">table</span><span class="p">(</span><span class="n">contigs</span><span class="o">$</span><span class="n">group</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
 
 <h6 id="header-6"><a href="#header-6"></a>Header 6</h6>
 

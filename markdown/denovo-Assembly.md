@@ -9,6 +9,7 @@ Based on work from [this guy](https://github.com/trinityrnaseq/trinityrnaseq/wik
 
 - Configure sample file
 - _Denovo_ Assembly with Trinity
+- Assembly quality
 
 ## [](#header-2)Configure sample file
 
@@ -47,11 +48,13 @@ Trinity --seqType fq --max_memory 100G \
          --trimmomatic \
          --quality_trimming_params "ILLUMINACLIP:$TRUSEQ/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:5:25 MINLEN:36"
 ```
+
 > If you have especially large RNA-Seq data sets involving many hundreds of millions of reads to billions of reads, in silico normalization is a necessity.  as of Nov, 2016, in silico normalization in Trinity happens by default; then just turn off the `--no_normalize_reads` option if necessary or read details in the [Trinity blog](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-Trinity#assembling-large-rna-seq-data-sets-hundreds-of-millions-to-billions-of-reads).
 >
 > To details with trimmomatic read the [pre-procesing step page](Processing)
 
- 
+## [](#header-2) Assembly quality
+
  Finally, you can run the `TrinityStats.pl` from the trinity toolkit in order to determine the assembly quality and completeness by computing the Nx statistics.
 
 ```shell

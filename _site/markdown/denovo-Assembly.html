@@ -52,6 +52,7 @@
 <ul>
   <li>Configure sample file</li>
   <li><em>Denovo</em> Assembly with Trinity</li>
+  <li>Assembly quality</li>
 </ul>
 
 <h2 id="configure-sample-file"><a href="#header-2"></a>Configure sample file</h2>
@@ -125,11 +126,14 @@ print $1,$2,$3,$4}'</span> | column <span class="nt">-t</span> <span class="o">&
          <span class="nt">--trimmomatic</span> <span class="se">\</span>
          <span class="nt">--quality_trimming_params</span> <span class="s2">"ILLUMINACLIP:</span><span class="nv">$TRUSEQ</span><span class="s2">/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:5:25 MINLEN:36"</span>
 </code></pre></div></div>
+
 <blockquote>
   <p>If you have especially large RNA-Seq data sets involving many hundreds of millions of reads to billions of reads, in silico normalization is a necessity.  as of Nov, 2016, in silico normalization in Trinity happens by default; then just turn off the <code class="highlighter-rouge">--no_normalize_reads</code> option if necessary or read details in the <a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-Trinity#assembling-large-rna-seq-data-sets-hundreds-of-millions-to-billions-of-reads">Trinity blog</a>.</p>
 
   <p>To details with trimmomatic read the <a href="Processing">pre-procesing step page</a></p>
 </blockquote>
+
+<h2 id="-assembly-quality"><a href="#header-2"></a> Assembly quality</h2>
 
 <p>Finally, you can run the <code class="highlighter-rouge">TrinityStats.pl</code> from the trinity toolkit in order to determine the assembly quality and completeness by computing the Nx statistics.</p>
 
