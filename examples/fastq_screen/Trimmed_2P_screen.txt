@@ -1,0 +1,9 @@
+#Fastq_screen version: 0.11.1	#Aligner: bowtie2	#Processing all reads in FASTQ files
+Genome	#Reads_processed	#Unmapped	%Unmapped	#One_hit_one_genome	%One_hit_one_genome	#Multiple_hits_one_genome	%Multiple_hits_one_genome	#One_hit_multiple_genomes	%One_hit_multiple_genomes	Multiple_hits_multiple_genomes	%Multiple_hits_multiple_genomes
+Human	7241462	7135534	98.54	29065	0.40	61526	0.85	42	0.00	15295	0.21
+Ecoli	7241462	7241450	100.00	1	0.00	5	0.00	0	0.00	6	0.00
+PhiX	7241462	7241462	100.00	0	0.00	0	0.00	0	0.00	0	0.00
+Univec	7241462	7237104	99.94	50	0.00	4	0.00	79	0.00	4225	0.06
+Cerevisiae	7241462	7226098	99.79	56	0.00	100	0.00	919	0.01	14289	0.20
+
+%Hit_no_genomes: 98.53
