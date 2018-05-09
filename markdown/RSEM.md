@@ -21,6 +21,15 @@ align_and_estimate_abundance.pl --transcripts Trinity.fasta --seqType fq  \
 
 ```
 
+>  Provide the transcript (agreed with your Trinity.fasta assembly) reference to assess the abundance through your paired samples (it is not indexed, it will be automatically done)
+> the sample file modified with the current identifier name (Ex. P.qtrim.gz prefix used within trinity --trimmomatic config
+
+Final step is output the isoform results in a matrix than could be input in follow statement:
+
+```
+ls `path_where_rsem_results_are`/rsem/*/*isoforms.results > isoforms.results
+```
+
 There should be whitespace between paragraphs.
 
 There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
