@@ -10,8 +10,6 @@ Only genes represented with an adjusted P-value (FDR, False Discovery Rate) < 1e
 
 
 
-
-
 ```shell
 module load R-3.3.1 
 
@@ -38,7 +36,10 @@ run_DE_analysis.pl \
 
 
 then, lets run 
+
 ```
+cd ./edgeR*
+
 $DF/analyze_diff_expr.pl --matrix ../RSEM.isoform.TMM.EXPR.matrix --samples ../samples.file -P 1e-3 -C 1 --order_columns_by_samples_file
 ```
 
@@ -48,8 +49,17 @@ or if error with size for map :
 $DF/analyze_diff_expr.pl --matrix ../RSEM.isoform.TMM.EXPR.matrix --samples ../samples.file -P 1e-3  -C 1 --max_DE_genes_per_comparison 1000 --max_genes_clust 10000
 ```
 
+Finally, count the number of diffExpr genes
 
+```
+wc -l diffExpr.P1e-3_C1.matrix
+```
 
+And up genes per contrast:
+
+```
+wc -l *UP.subset
+```
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
