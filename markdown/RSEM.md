@@ -21,6 +21,31 @@ align_and_estimate_abundance.pl --transcripts Trinity.fasta --seqType fq  \
 
 ```
 
+>  Provide the transcript (agreed with your Trinity.fasta assembly) reference to assess the abundance through your paired samples (it is not indexed, it will be automatically done)
+> the sample file modified with the current identifier name (Ex. P.qtrim.gz prefix used within trinity --trimmomatic config
+
+Final step is output the isoform results in a matrix than could be input in follow statement:
+
+```
+ls `path_where_rsem_results_are`/rsem/*/*isoforms.results > isoforms.results
+```
+
+Then, convert into a matrix:
+
+
+
+```
+abundance_estimates_to_matrix.pl \
+        --gene_trans_map Trinity.gene_trans_map \
+        --est_method RSEM \
+        --out_prefix RSEM.isoforms \
+        --quant_files isoforms.results.txt \
+        --name_sample_by_basedir
+```
+> The abundance_estimates_to_matrix.pl` script may be included in the trinity/utils folder (Ex. $INSTALLATION_PATH/trinityrnaseq-Trinity-v2.5.1/util/)
+
+> The gene_trans_map file details the relation between gene and isoforms in the assembly within two columns `<tab>` delimited file. It can be done by run get_Trinity_gene_to_trans_map.pl script in `INSTALLATION_PATH/trinity_utils/support_scripts/get_Trinity_gene_to_trans_map.pl trinity.fasta > Trinity.gene_trans_map`
+
 There should be whitespace between paragraphs.
 
 There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.

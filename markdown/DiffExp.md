@@ -8,14 +8,57 @@ In order to identify a global patterns of differential expression transcript-lev
 Each count data was normalized using the trimmed mean of M-values (TMM) normalization method, which was corrected for library size and reduced RNA compositional effect with run_DE_analysis.pl, performing 0.01 as dispersion value due to the biological replicates.
 Only genes represented with an adjusted P-value (FDR, False Discovery Rate) < 1e-2 and at least a two-fold change were considered as significantly differentially expressed in the pairwise comparison of the samples.
 
+
+
 ```shell
+module load R-3.3.1 
+
 run_DE_analysis.pl \
       	  --matrix ${PREFIX_}.${TYPE_RESULTS_}.counts.matrix \
        	 --method edgeR \
        	 --dispersion 0.01 \
-       	 --samples_file $SAMPLE_CONDITIONS \
-        	--output ${PREFIX_}_dir
+       	 --contrast $contrast_file 
 
+```
+> The contrast file include the pairwise comparisson through the conditions;
+
+#### [](#header-4)Contrast file contrast file
+
+|         |        |
+|:--------|:-------|
+| Female  | Male   |
+| Female  | Undiff |
+| Male    | Undiff |
+
+
+
+> DF=/LUSTRE/apps/bioinformatica/trinityrnaseq-Trinity-v2.5.1/Analysis/DifferentialExpression/
+
+
+then, lets run 
+
+```
+cd ./edgeR*
+
+$DF/analyze_diff_expr.pl --matrix ../RSEM.isoform.TMM.EXPR.matrix --samples ../samples.file -P 1e-3 -C 1 --order_columns_by_samples_file
+```
+
+or if error with size for map :
+
+```
+$DF/analyze_diff_expr.pl --matrix ../RSEM.isoform.TMM.EXPR.matrix --samples ../samples.file -P 1e-3  -C 1 --max_DE_genes_per_comparison 1000 --max_genes_clust 10000
+```
+
+Finally, count the number of diffExpr genes
+
+```
+wc -l diffExpr.P1e-3_C1.matrix
+```
+
+And up genes per contrast:
+
+```
+wc -l *UP.subset
 ```
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
