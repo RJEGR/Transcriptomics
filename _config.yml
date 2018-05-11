@@ -1,5 +1,5 @@
 title: Transcriptomic protocols
 description: NGS protocols to wrangling Transcriptomics.
-show_downloads: true
+show_downloads: false
 google_analytics:
 theme: jekyll-theme-minimal
