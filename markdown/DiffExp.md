@@ -9,11 +9,18 @@ Each count data was normalized using the trimmed mean of M-values (TMM) normaliz
 Only genes represented with an adjusted P-value (FDR, False Discovery Rate) < 1e-2 and at least a two-fold change were considered as significantly differentially expressed in the pairwise comparison of the samples.
 
 
+For aim this analysis lets use the version of Trinity 5.1 installed at: 
+
+```shell
+PATH=/LUSTRE/apps/bioinformatica/trinityrnaseq-Trinity-v2.5.1/Analysis/DifferentialExpression/
+```
+
+Then,
 
 ```shell
 module load R-3.3.1 
 
-run_DE_analysis.pl \
+$PATH/run_DE_analysis.pl \
       	  --matrix ${PREFIX_}.${TYPE_RESULTS_}.counts.matrix \
        	 --method edgeR \
        	 --dispersion 0.01 \
