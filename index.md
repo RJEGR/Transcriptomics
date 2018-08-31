@@ -14,8 +14,8 @@ De novo transcriptome assembly is the _de novo_ sequence assembly method of crea
 * [Annotation ](./markdown/trinotate).
 * [Abundance ](./markdown/RSEM).
 * [Differential Expression ](./markdown/DiffExp).
-* [Functional Annotation ](./markdown/DE-ontology).
-* [Further analysis](https://bioconductor.org/packages/3.7/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html#kegg-analysis)
+* [Functional Annotation (In process ...)](./markdown/DE-ontology).
+* [Further analysis (In process ...)](https://bioconductor.org/packages/3.7/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html#kegg-analysis)
     -Cluster Profile
     -ReactomePA
 
