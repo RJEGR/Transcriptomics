@@ -52,7 +52,10 @@ A complete example report coud be visualized in the next file [multiqc.html](../
 
 Trimmomatic performs a variety of useful trimming tasks for illumina paired-end and single ended data.The selection of trimming steps and their associated parameters are supplied on the command line. The follow syntaxis is configure to clip the adapter content for each library using the TruSeq3-PE; then, reads below the 36 bases long are dropped and average quality ≤ 25 are cutted within a sliding window of 5-bases. Also, 5-bases heads are cropped per read. 
 
-> By default the value for $TRUSEQ refers to the path where the file TruSeq3-PE-2.fa is found. By default in: /home/rgomez within the cluster.
+> By default the value for $TRUSEQ and $TRIMMOMATIC refers to the path where the files are found. Please cut and paste the path variables within the cluster as follow:
+
+> TRIMMOMATIC=/LUSTRE/bioinformatica_data/RNA/ricardo/bioinformatics/Trimmomatic-0.36
+TRUSEQ=/home/rgomez
 
 ```shell
 /// loading Java current version
@@ -61,25 +64,27 @@ $ for i in $(ls *gz | grep fastq);
 do 
   FORWARD=$(echo $i | grep R1); \
   REVERSE=$(echo $i | grep R2); \
-java -jar trimmomatic-0.36.jar PE -phred33 \
+java -jar $TRIMMOMATIC/trimmomatic-0.36.jar PE -phred33 \
       $FORWARD $REVERSE \
       ${FORWARD%.fastq.gz}.P.qtrim.fq.gz ${FORWARD%.fastq.gz}.UP.qtrim.fq.gz \
       ${REVERSE%.fastq.gz}.P.qtrim.fq.gz ${REVERSE%.fastq.gz}.UP.qtrim.fq.gz \
-      ILLUMINACLIP:/LUSTRE/bioinformatica_data/genomica_funcional/rgomez/oyster-rawdata/trimmomatic/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:5:25 MINLEN:36
+      ILLUMINACLIP:$TRUSEQ/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:4:15 MINLEN:36 LEADING:5 TRAILING:5
 ```
 
-The current trimming steps are:
+The current trimming steps will perform the follow:
 
-* ILLUMINACLIP: Cut adapter and other illumina-specific sequences from the read.
+* ILLUMINACLIP: Cut adapter and other illumina-specific sequences from the read
 * SLIDINGWINDOW: Perform a sliding window trimming, cutting once the average quality within the window falls below a threshold.
 * HEADCROP: Cut the specified number of bases from the start of the read
 * MINLEN: Drop the read if it is below a specified length
+* LEADING: Cut bases off the start of a read, if below a threshold quality
+* TRAILING: Cut bases off the end of a read, if below a threshold quality
 
 > To details visit site [here](http://www.usadellab.org/cms/?page=trimmomatic)
 
 > Trinity as embed the configuration to run trimmomatic automatically before the assembly; We prefer this way, but also you can run independently as code above or skip this part and run fastq Screen as final step before assembly.
 
-## [](#header-2) FastQ Screen
+## [](#header-2) FastQ Screen (Optional !)
 
 FastQ Screen allows you to set up a standard set of libraries against which all of your sequences can be searched. Your search libraries might contain the genomes of all of the organisms you work on, along with PhiX, Vectors or other contaminants commonly seen in sequencing experiments.
 

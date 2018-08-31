@@ -28,4 +28,4 @@ Password: ******
 
 The Center for Scientific Research and Higher Education of Ensenada (CICESE), Mexico have a computer cluster [(Paper) ](http://todos.cicese.mx/sitio/noticia.php?n=827#.WsJ-23XwZhE) with many bioinformatic apps installed within ready to implement by subscribed users.  
 
-Please, email PhD A. Lago in order to request a cluster account (a prior authorization from your responsal)
+**Please, email PhD A. Lago in order to request a cluster account (a prior authorization from your responsal)**
