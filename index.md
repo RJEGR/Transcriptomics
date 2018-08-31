@@ -38,7 +38,6 @@ The Center for Scientific Research and Higher Education of Ensenada (CICESE), Me
 
 Please, email PhD A. Lago in order to request a cluster account (a prior authorization from your responsal)
 
-### Trying dimplejs into my github markdown (works!!!!) : 
 
 <head>
     <script src="http://d3js.org/d3.v4.min.js"></script>
