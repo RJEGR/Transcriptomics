@@ -144,6 +144,4 @@ table(contigs$group)
 
 
 
-
-
 [back to Menu](../)
