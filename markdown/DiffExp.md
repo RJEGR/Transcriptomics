@@ -27,7 +27,8 @@ $PATH/run_DE_analysis.pl \
        	 --contrast $contrast_file 
 
 ```
-> The contrast file include the pairwise comparisson through the conditions;
+> The contrast file include the pairwise comparisson through the conditions.
+> The Dispersion value (for datasets arising from well-controlled experiments are 0.4 for human data, 0.1 for data on genetically identical model organisms or 0.01 for technical replicates
 
 #### [](#header-4)Contrast file contrast file
 
@@ -42,9 +43,9 @@ $PATH/run_DE_analysis.pl \
 > DF=/LUSTRE/apps/bioinformatica/trinityrnaseq-Trinity-v2.5.1/Analysis/DifferentialExpression/
 
 
-then, lets run 
+Then, lets run 
 
-```
+```bash
 cd ./edgeR*
 
 $DF/analyze_diff_expr.pl --matrix ../RSEM.isoform.TMM.EXPR.matrix --samples ../samples.file -P 1e-3 -C 1 --order_columns_by_samples_file
@@ -52,138 +53,69 @@ $DF/analyze_diff_expr.pl --matrix ../RSEM.isoform.TMM.EXPR.matrix --samples ../s
 
 or if error with size for map :
 
-```
+```bash
 $DF/analyze_diff_expr.pl --matrix ../RSEM.isoform.TMM.EXPR.matrix --samples ../samples.file -P 1e-3  -C 1 --max_DE_genes_per_comparison 1000 --max_genes_clust 10000
 ```
 
 Finally, count the number of diffExpr genes
 
-```
+```bash
 wc -l diffExpr.P1e-3_C1.matrix
 ```
 
 And up genes per contrast:
 
-```
+```bash
 wc -l *UP.subset
 ```
 
-Text can be **bold**, _italic_, or ~~strikethrough~~.
+#### [](#header-4) QC Samples and Biological Replicates
 
-[Link to another page](another-page).
+Once you've performed transcript quantification for each of your biological replicates, it's good to examine the data to ensure that your biological replicates are well correlated, and also to investigate relationships among your samples (Brian Haas, 2018, web:https://github.com/trinityrnaseq/trinityrnaseq/wiki/QC-Samples-and-Biological-Replicates). 
 
-There should be whitespace between paragraphs.
+#### [](#header-4) Batch effects
 
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
+Batch effects are sub-groups of measure- ments that have qualitatively different behaviour across conditions and are unrelated to the biological or scientific variables in a study. For example, batch effects may occur if a subset of experiments was run on Monday and another set on Tuesday, if two technicians were responsible for different subsets of the experiments or if two different lots of reagents, chips or instruments were used. These effects are not exclusive to high- throughput biology and genomics research, and batch effects also affect low-dimensional molecular measurements, such as northern blots and quantitative PCR. Although batch effects are difficult or impossible to detect in low-dimensional assays, high-throughput technologies provide enough data to detect and even remove them. However, if not properly dealt with, these effects can have a particularly strong and pervasive impact.
 
-# [](#header-1)Header 1
+One way to quantify the affect of non- biological variables is to **examine the principal components** of the data. Principal components are estimates of the most com- mon patterns that exist across features. For example, if most genes in a microarray study are differentially expressed with respect to cancer status, the first principal compo- nent will be highly correlated with cancer status. Principal components capture both biological and technical variability and, in some cases, principal components can be estimated after the biological variables have been accounted for15. In this case, the prin- cipal components primarily quantify the effects of artefacts on the high-throughput data. Principal components can be com- pared to known variables, such as processing group or time. If the principal components do not correlate with these known variables, there may be an alternative, unmeasured source of batch effects in the data. 
 
-This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
+**Tackling the widespread and critical impact of batch effects in high-throughput data (2010) Jeffrey T. Leek, Robert B. Scharpf, Héctor Corrada Bravo, David Simcha, Benjamin Langmead, W. Evan Johnson, Donald Geman, Keith Baggerly and Rafael A. Irizarry. NATURE REVIEWS | GENETICS**
 
-## [](#header-2)Header 2
+> If you have replicates that are clear outliers, you might consider removing them from your study as potential confounders. If it's clear that you have a batch effect, you'll want to eliminate the batch effect during your downstream analysis of differential expression.
 
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
+The trinity utils have the follow code to visualize some intersting patters from the abundance count matrix. Copy and paste the follow code within an script  (ex. PtR.sh ) and input both, your abundance count matrix as well as the samples.file used during your analysis. The final code syntax will be bash PtR.sh count.matrix samples.file
 
-### [](#header-3)Header 3
+```bash
+#!/bin/bash -ve
+PROG=~/Documents/Tools/trinityrnaseq-master/Analysis/DifferentialExpression/PtR
+FILE= $1 # input your count matrix
+SAMPLE=$2
 
-```js
-// Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
+#if [ -e $FILE.gz ] && [ ! -e $FILE.matrix ]; then
+#    gunzip -c $FILE > $FILE.matrix
+#fi
+
+# assessing read counts and genes mapped
+$PROG --matrix $FILE --samples $SAMPLE --boxplot_log2_dist 1 --output boxplots
+
+# compare replicates
+$PROG --matrix $FILE --samples $SAMPLE --compare_replicates --log2  --output rep_compare
+
+# correlation of expression across all samples
+$PROG --matrix $FILE --samples $SAMPLE --log2 --sample_cor_matrix --output sample_cor
+
+# PCA analysis
+$PROG --matrix $FILE --samples $SAMPLE --log2 --prin_comp 4 --output prin_comp
+
+# Most variably expressed genes
+$PROG --matrix $FILE --samples $SAMPLE --log2 --top_variable_genes 1000 --var_gene_method anova --heatmap --center_rows --output anovaTop1k
+
+# combine analyses
+$PROG --matrix $FILE --samples $SAMPLE --log2 \
+      --top_variable_genes 1000 --var_gene_method anova --output anovaTop1k --heatmap --prin_comp 3  --add_prin_comp_heatmaps 30 \
+      --center_rows --output top1kvarPC3Gene30
 ```
 
-```ruby
-# Ruby code with syntax highlighting
-GitHubPages::Dependencies.gems.each do |gem, version|
-  s.add_dependency(gem, "= #{version}")
-end
-```
+> PCA is a method for compressing a lot of data into something that capture the essence of the original data. 
+The goal of PCA is to draw a graph that shows how the samples are related (or not related) to each other. Please see the follow video by Josh Starmer [StatQuest: Principal Component Analysis (PCA) clearly explained (2015)](https://www.youtube.com/watch?v=_UVHneBUBW0&t=621s) to improve your knowlege in PCA.
 
-#### [](#header-4)Header 4
-
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-
-##### [](#header-5)Header 5
-
-1.  This is an ordered list following a header.
-2.  This is an ordered list following a header.
-3.  This is an ordered list following a header.
-
-###### [](#header-6)Header 6
-
-| head1        | head two          | three |
-|:-------------|:------------------|:------|
-| ok           | good swedish fish | nice  |
-| out of stock | good and plenty   | nice  |
-| ok           | good `oreos`      | hmm   |
-| ok           | good `zoute` drop | yumm  |
-
-### There's a horizontal rule below this.
-
-* * *
-
-### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-
-### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
-### Small image
-
-![](https://assets-cdn.github.com/images/icons/emoji/octocat.png)
-
-### Large image
-
-![](https://guides.github.com/activities/hello-world/branching.png)
-
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
-
-```
-The final element.
-```
