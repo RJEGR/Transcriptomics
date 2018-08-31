@@ -108,9 +108,27 @@ The contig N50 values can often be exaggerated due to an assembly program genera
 
 ## N50
 
-Imagine that you line up all the contigs in your assembly in the order of their sequence lengths (Fig. 1a). You have the longest contig first, then the second longest, and so on with the shortest ones in the end. Then you start adding up the lengths of all contigs from the beginning, so you take the longest contig + the second longest + the third longest and so on — all the way until you’ve reached the number that is making up 50% of your total assembly length. That length of the contig that you stopped counting at, this will be your N50 number (Fig. 1b).
+> Reference: [Elin Videvall, et. al. (2017), The molecular ecology](https://www.molecularecologist.com/2017/03/whats-n50/)
+
+Imagine that you line up all the contigs in your assembly in the order of their sequence lengths. You have the longest contig first, then the second longest, and so on with the shortest ones in the end. Then you start adding up the lengths of all contigs from the beginning, so you take the longest contig + the second longest + the third longest and so on — all the way until you’ve reached the number that is making up 50% of your total assembly length. That length of the contig that you stopped counting at, this will be your N50 number.
 
 We strongly advise against using regular N50 metrics for transcriptome assemblies. Instead, other more appropriate measures can be used. The developers of the transcriptome assembler Trinity have invented the ExN50 metric, which takes into account the expression levels of each contig and is therefore a more suitable contig length metric for transcriptomes.  
+
+Although we outline above several of the reasons for why the contig N50 statistic is not a useful metric of assembly quality, below we describe the use of an alternative statistic - the ExN50 value, which we assert is more useful in assessing the quality of the transcriptome assembly. The ExN50 indicates the N50 contig statistic (as earlier) but restricted to the top most highly expressed transcripts. Compute it like so (Brian Haas, 2016):
+
+```bash
+$TRINITY_HOME/util/misc/contig_ExN50_statistic.pl Trinity_trans.TMM.EXPR.matrix \
+        trinity_out_dir/Trinity.fasta > ExN50.stats
+```
+
+And plot
+```bash
+$TRINITY_HOME/util/misc/plot_ExN50_statistic.Rscript ExN50.stats
+
+xpdf ExN50.stats.plot.pdf
+```
+
+
 
 ## Reads represented
 
