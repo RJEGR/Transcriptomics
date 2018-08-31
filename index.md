@@ -19,10 +19,6 @@ De novo transcriptome assembly is the _de novo_ sequence assembly method of crea
     -Cluster Profile
     -ReactomePA
 
-Text can be **bold**, _italic_, or ~~strikethrough~~.
-
-There should be whitespace between paragraphs.
-
 ### Flow-analysis diagram
 
 ![](./figures/step-step-analysis.png)

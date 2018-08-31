@@ -54,8 +54,10 @@ Trimmomatic performs a variety of useful trimming tasks for illumina paired-end 
 
 > By default the value for $TRUSEQ and $TRIMMOMATIC refers to the path where the files are found. Please cut and paste the path variables within the cluster as follow:
 
-> TRIMMOMATIC=/LUSTRE/bioinformatica_data/RNA/ricardo/bioinformatics/Trimmomatic-0.36
-TRUSEQ=/home/rgomez
+>TRIMMOMATIC=/LUSTRE/bioinformatica_data/RNA/ricardo/bioinformatics/Trimmomatic-0.36
+
+> TRUSEQ=/home/rgomez
+
 
 ```shell
 /// loading Java current version
