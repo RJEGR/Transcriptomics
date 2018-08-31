@@ -42,7 +42,7 @@ Then, lets run the assembly including the trimmomatic step
 ```shell
 Trinity --seqType fq --max_memory 100G \
          --samples_file samples.file \
-         --no_normalize_reads \
+#         --no_normalize_reads \
          --CPU 24 \
          --output trinity_out \
 
