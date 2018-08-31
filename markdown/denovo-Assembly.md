@@ -45,8 +45,7 @@ Trinity --seqType fq --max_memory 100G \
          --no_normalize_reads \
          --CPU 24 \
          --output trinity_out \
-         --trimmomatic \
-         --quality_trimming_params "ILLUMINACLIP:$TRUSEQ/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:5:25 MINLEN:36"
+
 ```
 
 > If you have especially large RNA-Seq data sets involving many hundreds of millions of reads to billions of reads, in silico normalization is a necessity.  as of Nov, 2016, in silico normalization in Trinity happens by default; then just turn off the `--no_normalize_reads` option if necessary or read details in the [Trinity blog](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-Trinity#assembling-large-rna-seq-data-sets-hundreds-of-millions-to-billions-of-reads).
