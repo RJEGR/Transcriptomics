@@ -62,15 +62,17 @@ Trimmomatic performs a variety of useful trimming tasks for illumina paired-end 
 ```shell
 /// loading Java current version
 $ module load jdk1.8.0_60
-$ for i in $(ls *gz | grep fastq); 
+$ for file in $(ls *R1*gz | grep fastq) 
 do 
-  FORWARD=$(echo $i | grep R1); \
-  REVERSE=$(echo $i | grep R2); \
-java -jar $TRIMMOMATIC/trimmomatic-0.36.jar PE -phred33 \
-      $FORWARD $REVERSE \
-      ${FORWARD%.fastq.gz}.P.qtrim.fq.gz ${FORWARD%.fastq.gz}.UP.qtrim.fq.gz \
-      ${REVERSE%.fastq.gz}.P.qtrim.fq.gz ${REVERSE%.fastq.gz}.UP.qtrim.fq.gz \
-      ILLUMINACLIP:$TRUSEQ/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:4:15 MINLEN:36 LEADING:5 TRAILING:5
+withpath="${file}"
+filename=${withpath##*/}
+base="${filename%*_R*.fastq.gz}"
+java -jar $TRIMMOMATIC/trimmomatic-0.36.jar PE -phred33 \ 
+    ${base}_R1_001.fastq.gz ${base}_R2_001.fastq.gz \
+    ${base}_R1.P.qtrim.fq.gz ${base}_R1.UP.qtrim.fq.gz \
+    ${base}_R2.P.qtrim.fq.gz ${base}_R2.UP.qtrim.fq.gz \
+    ILLUMINACLIP:$TRUSEQ/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:4:15 MINLEN:36 LEADING:5 TRAILING:5
+done 
 ```
 
 The current trimming steps will perform the follow:
