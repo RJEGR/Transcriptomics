@@ -8,11 +8,14 @@ layout: default
 
 
 ```shell
+SOURCE=/LUSTRE/bioinformatica_data/genomica_funcional/scripts/exports
+source $SOURCE
+
 get_Trinity_gene_to_trans_map .pl Trinity.fasta > Trinity.fasta.gene_trans_map
 
 Build_Trinotate_Boilerplate_SQLite_db.pl Trinotate && 
 
-~/ncbi-blast-2.4.0+/bin/makeblastdb -in uniprot_sprot.pep -dbtype prot 
+$BLAST/makeblastdb -in uniprot_sprot.pep -dbtype prot 
 
 gunzip Pfam-A.hmm.gz && $HMM/hmmpress Pfam-A.hmm
 
