@@ -23,11 +23,13 @@ gunzip Pfam-A.hmm.gz && $HMM/hmmpress Pfam-A.hmm
 
 autoTrinotate.pl --Trinotate_sqlite Trinotate.sqlite \
                         --transcripts Trinity.fasta \
-                        --gene_to_trans_map Trinity.gene_trans_map \
-                        --conf conf.txt \
-                        --CPU 120
+                        --gene_to_trans_map Trinity.fasta.gene_trans_map \
+                        --conf $CONFIG \
+                        --CPU 24
 
 ```
+
+> The --CPU option will vary depend upon your slurm perameters
 
 [Link to another page](another-page).
 
