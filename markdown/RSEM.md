@@ -12,8 +12,7 @@ align_and_estimate_abundance.pl --transcripts Trinity.fasta --seqType fq  \
     --prep_reference \
     --trinity_mode \
     --samples_file samples.file \ 
-    --output_dir \
-    --thread_count=24 &
+    --thread_count=24
 
 ```
 
