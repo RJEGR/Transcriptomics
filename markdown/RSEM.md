@@ -11,7 +11,7 @@ align_and_estimate_abundance.pl --transcripts Trinity.fasta --seqType fq  \
     --aln_method bowtie2 \
     --prep_reference \
     --trinity_mode \
-    --samples_file samples.file \ 
+    --samples_file samples.file \
     --thread_count=24
 
 ```
