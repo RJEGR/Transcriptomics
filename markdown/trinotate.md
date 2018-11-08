@@ -5,7 +5,7 @@ layout: default
 [back to Menu](../)
 
 
-**Anotación funcional del transcriptoma**
+# Anotación funcional del transcriptoma
 
 Después de ensamblar tu transcriptoma, es necesario que se anote cada contig (ie. lectura ensamblada o transcrito) a una base de datos de referencia de secuencias homólogas de modo que se prediga el origen biológico de cada uno de tus genes expresados en tu modelo experimental. Herramientas como *blast2go* son utilizadas para realizar este análisis; sin embargo, dicha herramienta no es gratuita en su totalidad. En esta vía, *trinotate* es un paquete bioinformático gratuito - muy completo a mi parecer - para los análisis de anotación funcional de tu ensamble. Trinotate hace uso de varios métodos diferentes para la anotación funcional de genes, incluida la búsqueda de homología a datos de secuencia conocidos (BLAST+ / SwissProt), identificación de dominio de proteína (HMMER/PFAM), péptido señal proteico y predicción de dominio transmembrana (signalP/tmHMMM) aprovechando varias bases de datos de anotación (bases de datos eggNOG / GO / Kegg) y un solo flujo de análisis que encarga de lo siguiente:
 
@@ -23,7 +23,7 @@ Después de ensamblar tu transcriptoma, es necesario que se anote cada contig (i
 
 En la experiencia personal, el uso de *trinotate* ha dado como resultado un mejor rendimiento (menos tiempo computacional y un análisis bioinformático enriquecido) que la contraparte de *blast2go* y útil para anotar automáticamente un flujo de trabajo a la vez. En el siguiente capítulo incluimos la estrategia de usar trinotate hasta obtener visualizaciones publicables y en las últimas páginas encontrarás el desglose de los análisis que trinotate lleva a cabo en su flujo de trabajo. Partimos del conocimiento de que tenemos un montón de secuencias de nuestro ensamble, además hemos identificado un subconjunto de ellas que parecen estar  expresándose diferencialmente a lo largo de nuestras condiciones, pero no sabemos realmente qué son o qué funciones biológicas podrían tener.  
 
- **Preparar bases de datos**
+ ## Preparar bases de datos
 
 En esta ocasión implementaremos el comando *source* para exportar algunas variables de ambiente de linux dentro del cluster:
 
