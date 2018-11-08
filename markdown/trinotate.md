@@ -23,7 +23,7 @@ Después de ensamblar tu transcriptoma, es necesario que se anote cada contig (i
 
 En la experiencia personal, el uso de *trinotate* ha dado como resultado un mejor rendimiento (menos tiempo computacional y un análisis bioinformático enriquecido) que la contraparte de *blast2go* y útil para anotar automáticamente un flujo de trabajo a la vez. En el siguiente capítulo incluimos la estrategia de usar trinotate hasta obtener visualizaciones publicables y en las últimas páginas encontrarás el desglose de los análisis que trinotate lleva a cabo en su flujo de trabajo. Partimos del conocimiento de que tenemos un montón de secuencias de nuestro ensamble, además hemos identificado un subconjunto de ellas que parecen estar  expresándose diferencialmente a lo largo de nuestras condiciones, pero no sabemos realmente qué son o qué funciones biológicas podrían tener.  
 
- ## [](#header-2) **Preparar bases de datos**
+## [](#header-2) **Preparar bases de datos**
 
 En esta ocasión implementaremos el comando *source* para exportar algunas variables de ambiente de linux dentro del cluster:
 
