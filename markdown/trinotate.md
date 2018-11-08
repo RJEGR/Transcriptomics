@@ -5,7 +5,7 @@ layout: default
 [back to Menu](../)
 
 
-# Anotación funcional del transcriptoma
+# [](#header-1) Anotación funcional del transcriptoma
 
 Después de ensamblar tu transcriptoma, es necesario que se anote cada contig (ie. lectura ensamblada o transcrito) a una base de datos de referencia de secuencias homólogas de modo que se prediga el origen biológico de cada uno de tus genes expresados en tu modelo experimental. Herramientas como *blast2go* son utilizadas para realizar este análisis; sin embargo, dicha herramienta no es gratuita en su totalidad. En esta vía, *trinotate* es un paquete bioinformático gratuito - muy completo a mi parecer - para los análisis de anotación funcional de tu ensamble. Trinotate hace uso de varios métodos diferentes para la anotación funcional de genes, incluida la búsqueda de homología a datos de secuencia conocidos (BLAST+ / SwissProt), identificación de dominio de proteína (HMMER/PFAM), péptido señal proteico y predicción de dominio transmembrana (signalP/tmHMMM) aprovechando varias bases de datos de anotación (bases de datos eggNOG / GO / Kegg) y un solo flujo de análisis que encarga de lo siguiente:
 
@@ -23,7 +23,7 @@ Después de ensamblar tu transcriptoma, es necesario que se anote cada contig (i
 
 En la experiencia personal, el uso de *trinotate* ha dado como resultado un mejor rendimiento (menos tiempo computacional y un análisis bioinformático enriquecido) que la contraparte de *blast2go* y útil para anotar automáticamente un flujo de trabajo a la vez. En el siguiente capítulo incluimos la estrategia de usar trinotate hasta obtener visualizaciones publicables y en las últimas páginas encontrarás el desglose de los análisis que trinotate lleva a cabo en su flujo de trabajo. Partimos del conocimiento de que tenemos un montón de secuencias de nuestro ensamble, además hemos identificado un subconjunto de ellas que parecen estar  expresándose diferencialmente a lo largo de nuestras condiciones, pero no sabemos realmente qué son o qué funciones biológicas podrían tener.  
 
- ## Preparar bases de datos
+ ## [](#header-2) Preparar bases de datos
 
 En esta ocasión implementaremos el comando *source* para exportar algunas variables de ambiente de linux dentro del cluster:
 
@@ -86,7 +86,7 @@ Como resultado de preparar las bases de datos tendrás los siguientes archivos a
 
 ```
 
-**Automatización de la anotación**
+## [](#header-2) Automatización de la anotación
 
 El siguiente paso es correr el análisis de anotación funcional. Los desarrolladores de Trinotate crearon un script que automáticamente lleva a cabo todo el análisis descrito con anterioridad. Para este paso, saldremos de la carpeta *dataBase* y trabajaremos en un nuevo directorio que llamaremos ANNOTATION (/LUSTRE/bioinformatica_data/genomica_funcional/Edgar/projects/TUTORIAL_RNASEQ/ANNOTATION); En este nuevo directorio haremos una copia o link simbólico de nuestro ensamble *good.Trinity.fasta* y nuestro contenedor de bases *Trinotate.sqlite;* ejemplo:
 
@@ -105,18 +105,17 @@ ln -s $PATH/ASSEMBLY/QC_ASSEMBLY/gcontigs/Trinity/good.Trinity.fasta .
 
 además de llevar a cabo los siguientes preparativos:
 
-**1) 	Formato de la relación de isoformas y genes**
+#### [](#header-4) 1) 	Formato de la relación de isoformas y genes
 
 ```bash
 UTILS=/LUSTRE/apps/bioinformatica/trinityrnaseq/util/support_scripts
 $UTILS/get_Trinity_gene_to_trans_map.pl good.Trinity.fasta > good.Trinity.gene_trans_map
 ```
-
-**2 )	Modificación del archivo de configuración**
+#### [](#header-4) 2 )	Modificación del archivo de configuración
 
 Abriremos el archivo *conf.txt* de configuración usando cualquier editor de texto (vi, nano, etc) y modificaremos algunas rutas de programas (“progs” ) y bases de datos ( “dbs”) dentro de su contenido. En la siguiente figura nos daremos cuenta que en la ruta de programas están definidas las rutas absolutas donde estas herramientas están alojadas dentro del cluster, por lo que solo será necesario establecer la ruta relativa del directorio donde colocamos nuestras bases de datos en el paso de la construcción del archivo *SQLite*. 
 
-![](/Users/cigom/Desktop/trinotate_config.png)
+![](../examples/Annotation/trinotate_config.png)
 
 Puedes hacer una copia del archivo de configuracion *conf.txt* desde la ruta de instalacion del programa  `/LUSTRE/apps/bioinformatica/Trinotate/auto/conf.txt` o desde la ruta descrita en este tutorial: `/LUSTRE/bioinformatica_data/genomica_funcional/Edgar/projects/TUTORIAL_RNASEQ/ANNOTATION/conf.txt `que viene pre-configurado para usar en el cluster omica:
 
@@ -159,9 +158,9 @@ exit
 > The --CPU option will vary depend upon your slurm perameters
 
 
-**Resultados**
+## [](#header-2) Resultados
 
-Encontraremos diversos archivos en nuestro directorio de trabajo ANNOTATION, para cada una de las etapas del análisis, un archivo con extensión *ok es generado como punto de control de las etapas del análisis. El archivo de salida que nos interesa es el que tiene por nombre Trinotate.xls.![](/Users/cigom/Desktop/trinotate_results.png)
+Encontraremos diversos archivos en nuestro directorio de trabajo ANNOTATION, para cada una de las etapas del análisis, un archivo con extensión *ok es generado como punto de control de las etapas del análisis. El archivo de salida que nos interesa es el que tiene por nombre Trinotate.xls.![](../examples/Annotation/trinotate_results.png)
 
 
 
@@ -190,9 +189,9 @@ Si echamos un vistazo a nuestro archivo Trinotate.xls encontraremos 18 columnas 
 
 
 
-Una estrategia para manejar estos resultados es a través de la herramienta trinotateR en R  
+Usemos una estrategia para manejar estos resultados es a través de la herramienta trinotateR en R  
 
-**Uso de trinotateR para obtener la anotación de ontología de genes.**
+### [](#header-3) **Uso de trinotateR para obtener la anotación de ontología de genes.**
 
 trinotateR es un paquete (Chris Stubben, 2018) con funciones simples y útiles para manipular el producto final de *Trinotate*. La mayoría de las anotaciones contienen accesos múltiples en una lista delimitada por comillas y cada hit contiene múltiples campos en una lista delimitada por caracteres. Por ejemplo, la segunda anotación de Pfam a continuación contiene dos hits y cada hit contiene un id de pfam, símbolo, nombre, alineación y un valor E. Las funciones *split_pfam* dividen múltiples hits y campos, por lo que la segunda anotación Pfam ahora se imprime en las filas 2 y 3 a continuación.
 
@@ -233,7 +232,7 @@ Se imprimirá en pantalla el resumen de la anotación obtenida para el ensamble 
 
 Otros archivos que se generan en tu nuevo directorio de trabajo son resultados en formato: `*.pdf` y `*.html`: 
 
-![](/Users/cigom/Desktop/trinotate_visualizations.png)
+![](../examples/Annotation/trinotate_visualizations.png)
 
 En el documento pdf se contiene figuras sobre la anotación a lo largo de los transcritos procesados con el flujo de Trinotate mientras que el archivo html es un documento digital que contiene la anotación hecha con la base de datos de Pfam.
 
@@ -245,27 +244,27 @@ En el documento pdf se contiene figuras sobre la anotación a lo largo de los tr
 
 * Proceso biológico (los procesos más grandes, o 'programas biológicos' realizados por múltiples actividades moleculares). 
 
-![](/Users/cigom/Desktop/trinotate_ontologia.png)
+![](../examples/Annotation/trinotate_ontologia.png)
 
 Además, se incluye la anotación de la categoría funcional EggNOG 
 
-![](/Users/cigom/Desktop/Trinotate_eggnogg.png)
+![](../examples/Annotation/Trinotate_eggnogg.png)
 
 Así como el perfil de taxones (nivel género) anotados en el *blastp* y *blastx* desarrollado en el flujo de análisis durante este manual: 
 
-![](/Users/cigom/Desktop/trinotate_genus.png)
+![](../examples/Annotation/trinotate_genus.png)
 
 Por otra parte, el documento digital html consiste en una tabla que reporta las anotaciones de los dominio proteico encontrados en el ensamble; también nos da un resumen total del número de genes, transcritos y proteínas que tuvieron alguna anotación a lo largo del transcriptoma (últimas cuatro columnas de lado derecho); finalmente, dando click en los hipervínculos sombreados con color azul tiene acceso directo a la base de datos de familias proteicas según sea el identificador pfam anotado. 
 
 Así también, el documento html permite hacer descarga (Panel A), copiar e imprimir los resultados ya sea total o parcialmente, si se efectúa una búsqueda (Panel B).
 
-![](/Users/cigom/Desktop/trinotate_pfam.png)
+![](../examples/Annotation/trinotate_pfam.png)
 
-**Desglose de los análisis que se llevan a cabo en el flujo de análisis en trinotate:**
+## [](#header-2) **Desglose de los análisis que se llevan a cabo en el flujo de análisis en trinotate:**
 
  
 
-**Identificación de regiones codificantes**
+### [](#header-3) **Identificación de regiones codificantes**
 
 El flujo de la anotación integra la herramienta *TransDecoder;* Esta es una herramienta útil para predecir regiones codificantes cualquier secuencia de nucleótidos a través de heurística codones y marcos de lectura abiertos (ORF). Esta información es útil para validar la expresión de transcritos que se ajustan al dogma central de la biología molecular: gen → ARN → proteína. Para mayor detalle del funcionamiento de esta herramienta visita la documentacion en google.
 
@@ -311,7 +310,7 @@ $BLAST/blastp -query Trinity.fasta.transdecoder.pep \
           > swissprot.blastp.outfmt6
 ```
 
-**Pfam:** **identificación de dominio proteicos**
+### [](#header-3) **Pfam:** **identificación de dominio proteicos**
 
 Usando nuestras secuencias de proteínas reportadas con *transdecoder*, también ejecutemos una búsqueda HMMER en la base de datos de Pfam e identifiquemos los dominios conservados que pueden ser indicativos o sugerentes de función:
 
@@ -320,7 +319,7 @@ HMMSCAN=/LUSTRE/bioinformatica_data/genomica_funcional/bin/hmmer-3.1b2-linux-int
 srun $HMMSCAN/hmmscan --cpu 24 --domtblout TrinotatePFAM.out Pfam-A.hmm good.Trinity.fasta.transdecoder.pep
 ```
 
-**Predicción de señales peptídicas**
+### [](#header-3) **Predicción de señales peptídicas**
 
 Las herramientas *signalP* y *tmhmm* son muy útiles para predecir señales peptídicas (señales de secreción) y dominios transmembrana, respectivamente.
 
@@ -330,7 +329,7 @@ SIGNALP=/LUSTRE/bioinformatica_data/genomica_funcional/bin/signalp-4.1
 srun $SIGNALP/signalp -f short -n signalp.out good.Trinity.fasta.transdecoder.pep > sigP.log &
 ```
 
-**Predicción de dominios transmembranal**
+### [](#header-3) **Predicción de dominios transmembranal**
 
 ```bash
 TMHMM=/LUSTRE/bioinformatica_data/genomica_funcional/bin/tmhmm-2.0c/bin
@@ -340,7 +339,7 @@ srun $TMHMM/tmhmm --short < good.Trinity.fasta.transdecoder.pep > tmhmm.out &
 
  
 
-**Identificar transcritos de origen ribosomal**
+### [](#header-3) **Identificar transcritos de origen ribosomal**
 
 ```bash
 RNAMMER_TRANS=/LUSTRE/bioinformatica_data/genomica_funcional/bin/Trinotate/util/rnammer_support
@@ -364,7 +363,7 @@ Trinotate Trinotate.sqlite init --gene_trans_map good.Trinity.gene_trans_map --t
 
 
 
-1)    **Resultados a nivel proteina:**
+### [](#header-3) **1)**    **Resultados a nivel proteina:**
 
 ```bash
 Trinotate Trinotate.sqlite LOAD_swissprot_blastp swissprot.blastp.outfmt6
@@ -373,7 +372,7 @@ Trinotate Trinotate.sqlite LOAD_signalp signalp.out
 Trinotate Trinotate.sqlite LOAD_tmhmm tmhmm.out
 ```
 
-**2)**    **Resultados a nivel RNA**
+### [](#header-3) **2)**    **Resultados a nivel RNA**
 
 ```bash
 Trinotate Trinotate.sqlite  LOAD_swissprot_blastx ../BLAST/tutorial_sp_f6
@@ -381,7 +380,7 @@ Trinotate Trinotate.sqlite LOAD_rnammer good.Trinity.fasta.rnammer.gff
 Trinotate Trinotate.sqlite report > Trinotate.xls 
 ```
 
-**Adicionales:**
+### [](#header-3) **Adicionales:**
 
 ```bash
 GO_NAME=/LUSTRE/apps/bioinformatica/Trinotate/util/
