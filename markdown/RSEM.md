@@ -6,12 +6,25 @@ layout: default
 Both, the de novo transcriptome assembly and all pre-processed libraries were used as input to perform a sample-specific expression analysis. All reads were aligned back against the indexed de novo transcriptome assembled using Bowtie2 (Langmead and Salzberg, 2012), followed by calculation of gene and isoform expression levels using Expectation-Maximization algorithm embedded in the Trinity differential expression modules (align_and_estimate_abundance.pl) on a per sample basis.
 
 ```shell
-align_and_estimate_abundance.pl --transcripts Trinity.fasta --seqType fq  \
+#Defining paths for RSEM
+BOWTIE2=/LUSTRE/apps/bioinformatica/bowtie2
+UTILS=/LUSTRE/apps/bioinformatica/trinityrnaseq-Trinity-v2.5.1/util
+RSEM=/LUSTRE/bioinformatica_data/genomica_funcional/bin/RSEM
+SAM2LS=/LUSTRE/apps/bioinformatica/samtools-1.7/bin
+
+#exporting paths:
+export PATH=$UTILS:$PATH
+export PATH=$BOWTIE2:$PATH
+export PATH=$RSEM:$PATH
+export PATH=$SAM2LS:$PATH
+
+
+align_and_estimate_abundance.pl --transcripts Trinity.fasta --seqType fq \
     --est_method RSEM \
     --aln_method bowtie2 \
     --prep_reference \
     --trinity_mode \
-    --samples_file samples.file \
+    --samples_file samples \
     --thread_count=24
 
 ```
