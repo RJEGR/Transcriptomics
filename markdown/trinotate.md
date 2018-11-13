@@ -93,12 +93,14 @@ El siguiente paso es correr el análisis de anotación funcional. Los desarrolla
 
 
 ```bash
+cd ../
+PATH=/`pwd`
+
 mkdir ANNOTATION
 cd ANNOTATION
 
-PATH=/LUSTRE/bioinformatica_data/genomica_funcional/Edgar/projects/TUTORIAL_RNASEQ/
+cp $PATH/dataBase/Trinotate.sqlite .
 
-cp $PATH/dataBase/ .
 ln -s $PATH/ASSEMBLY/QC_ASSEMBLY/gcontigs/Trinity/good.Trinity.fasta .
 
 ```
