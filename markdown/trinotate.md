@@ -83,7 +83,7 @@ Como resultado de preparar las bases de datos tendrás los siguientes archivos a
 
 ## [](#header-2) Automatización de la anotación
 
-El siguiente paso es correr el análisis de anotación funcional. Los desarrolladores de Trinotate crearon un script que automáticamente lleva a cabo todo el análisis descrito con anterioridad. Para este paso, saldremos de la carpeta *dataBase* y trabajaremos en un nuevo directorio que llamaremos ANNOTATION (/LUSTRE/bioinformatica_data/genomica_funcional/Edgar/projects/TUTORIAL_RNASEQ/ANNOTATION); En este nuevo directorio haremos una copia o link simbólico de nuestro ensamble *good.Trinity.fasta* y nuestro contenedor de bases *Trinotate.sqlite;* ejemplo:
+El siguiente paso es correr el análisis de anotación funcional. Los desarrolladores de Trinotate crearon un script que automáticamente lleva a cabo todo el análisis descrito con anterioridad. Para este paso, saldremos de la carpeta *dataBase* y trabajaremos en un nuevo directorio que llamaremos ANNOTATION (/LUSTRE/bioinformatica_data/genomica_funcional/Edgar/projects/TUTORIAL_RNASEQ/ANNOTATION); En este nuevo directorio haremos una copia o link simbólico de nuestro ensamble, Por ejemplo: *good.Trinity.fasta*,  y nuestro contenedor de bases *Trinotate.sqlite;* ejemplo:
 
 
 
