@@ -1,0 +1,18 @@
+
+export GENFUN=/LUSTRE/bioinformatica_data/genomica_funcional 
+export CONFIG=$GENFUN/rgomez/oyster-rawdata/method_v1/annotation/conf.txt                     
+export BIN=$GENFUN/bin                                                                 
+
+export BLAST=$BIN/ncbi-blast-2.4.0+/bin                                         
+export UTILS=/LUSTRE/apps/bioinformatica/trinityrnaseq/util/support_scripts    
+export TRINOTATE=/LUSTRE/apps/bioinformatica/Trinotate/                                
+export NOTATE_AD=$TRINOTATE/admin                                                      
+export HMM=$BIN/hmmer-3.1b2-linux-intel-x86_64/binaries
+
+export PATH=/LUSTRE/apps/bioinformatica/transdecoder/:$PATH
+export PATH=$TRINOTATE/auto/:$PATH    
+export PATH=/LUSTRE/bioinformatica_data/RNA/ricardo/bioinformatics/hmmer/:$PATH      
+
+
+SOURCE=/LUSTRE/bioinformatica_data/genomica_funcional/scripts/exports
+source $SOURCE
