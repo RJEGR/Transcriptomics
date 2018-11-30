@@ -262,6 +262,13 @@ Así también, el documento html permite hacer descarga (Panel A), copiar e impr
 
 ![](../examples/Annotation/trinotate_pfam.png)
 
+Finalmente, si se cuenta con los resultados de expresion diferencial, puede implementar el siguiente Script para generar un subconjunto de las anotaciones de los genes expresados diferenciales (Ej. diffExpr.P0.01_C1.matrix):
+
+```bash
+curl https://raw.githubusercontent.com/RJEGR/infovis/master/Profiling.R -o Profiling.R
+Rscript --vanilla Profiling.R Trinotate.xls.RData diffExpr.P0.01_C1.matrix
+```
+
 ## [](#header-2) **Desglose de los análisis que se llevan a cabo en el flujo de análisis en trinotate:**
 
  
