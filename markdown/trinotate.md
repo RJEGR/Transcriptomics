@@ -268,6 +268,10 @@ Finalmente, si se cuenta con los resultados de expresion diferencial, puede impl
 curl https://raw.githubusercontent.com/RJEGR/infovis/master/Profiling.R -o Profiling.R
 Rscript --vanilla Profiling.R Trinotate.xls.RData diffExpr.P0.01_C1.matrix
 ```
+Este paso genera tres archivos con extension .tsv; estos facilmente pueden ser abiertos desde la herramienta excel u otro editor de tablas:
+
+![](../examples/Annotation/profiling.png)
+
 
 ## [](#header-2) **Desglose de los análisis que se llevan a cabo en el flujo de análisis en trinotate:**
 
