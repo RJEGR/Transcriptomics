@@ -28,8 +28,8 @@ FastQC aims to provide a simple way to do some quality control checks on raw seq
 It can be run easely through all your fastq libraries as follow:
 
 ```shell
-$ mkdir fastqc
-$ srun -n 1 fastqc *.gz -t 24 -o ./fastqc &
+mkdir fastqc
+srun -n 1 fastqc *.gz -t 24 --nogroup -o ./fastqc &
 ```
 
 ## [](#header-2) MultiQC
@@ -37,10 +37,10 @@ $ srun -n 1 fastqc *.gz -t 24 -o ./fastqc &
 In addition, you can aggregate results from fastqc across all your libraries (`zip format`) into a single report using multiqc tool. And can be run as follow:
 
 ```shell
-$ mkdir multiqc
-$ export PATH=/LUSTRE/apps/Anaconda/conda2/bin:$PATH
-$ source activate multiqc_py2.7
-$ multiqc ./fastqc/*zip -o ./multiqc --data-format json --export
+mkdir multiqc
+export PATH=/LUSTRE/apps/Anaconda/conda2/bin:$PATH
+source activate multiqc_py2.7
+multiqc ./fastqc/*zip -o ./multiqc --data-format json --export
 ```
 
 A complete example report coud be visualized in the next file [multiqc.html](../examples/raw_processing/multiqc_report.html)
@@ -61,18 +61,18 @@ Trimmomatic performs a variety of useful trimming tasks for illumina paired-end 
 
 ```shell
 /// loading Java current version
-$ module load jdk1.8.0_60
-$ for file in $(ls *R1*gz | grep fastq) 
-do 
+module load jdk1.8.0_60
+for file in $(ls *R1*gz | grep -e 'fastq' -e 'fq')
+do
 withpath="${file}"
 filename=${withpath##*/}
 base="${filename%*_R*.fastq.gz}"
-java -jar $TRIMMOMATIC/trimmomatic-0.36.jar PE -phred33 \ 
+java -jar $TRIMMOMATIC/trimmomatic-0.36.jar PE -phred33 \
     ${base}_R1_001.fastq.gz ${base}_R2_001.fastq.gz \
     ${base}_R1.P.qtrim.fq.gz ${base}_R1.UP.qtrim.fq.gz \
     ${base}_R2.P.qtrim.fq.gz ${base}_R2.UP.qtrim.fq.gz \
     ILLUMINACLIP:$TRUSEQ/TruSeq3-PE-2.fa:2:30:10 HEADCROP:5 SLIDINGWINDOW:4:15 MINLEN:36 LEADING:5 TRAILING:5
-done 
+done
 ```
 
 The current trimming steps will perform the follow:
@@ -96,7 +96,7 @@ We recomend to integrate in this step the non redundant Univec database. UniVec 
 
 The follow table show the reference used in this step:
 
-* * * 
+* * *
 
 | Type        | Reference          | Source |
 |:-------------|:------------------|:------|
@@ -108,9 +108,9 @@ The follow table show the reference used in this step:
 
 
 For any dabase screening versus your libraries fastq Screen provide a tab-delimited configure file to set up the reference list of databases of your chose. Also, fastq screeen cat implement either, bowtie (used for sequences less than 100 bp ie. small RNAs) or bowtie2 (bw2 used in paired-end sequences round to 200 bp). In this way, you need to index your databases before modify the configure file as this example:  
- 
+
 ```shell 
-$ srun bowtie2-build reference.fa reference &
+srun bowtie2-build reference.fa reference &
 ```
 Finally, modify the configure file (dowload a template [here](../examples/fastq_screen/fastq_screen.conf)) and then run the tool:
 
