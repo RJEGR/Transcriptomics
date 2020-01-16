@@ -2,7 +2,7 @@
 layout: default
 ---
 
-De novo transcriptome assembly is the _de novo_ sequence assembly method of creating a transcriptome without the aid of a reference genome (wikipedia). The availability of Next Generation Sequencing (NGS) technologies allows researchers to capture the spatial or temporal profile of gene expresion from a huge types of biological samples. The Following markdown describe an integrative workflow analysis in RNA-seq data based on the current bioinformatic methods.
+A non-guided transcriptome assembly usually aims to the *de novo* assembly method of creating a transcriptome without the aid of a reference genome. The availability of Next Generation Sequencing (NGS) technologies allows researchers to capture the spatial or temporal profile of gene expresion from a huge types of biological samples. The Following markdown describe an integrative workflow analysis in RNA-seq data based on the current bioinformatic methods.
 
 > -Ricardo Gore
 
@@ -69,27 +69,27 @@ Please, email PhD A. Lago in order to request a cluster account (a prior authori
       // Filter for a single SKU and Channel
       data = dimple.filterData(data, "SKU", "Theta 18 Pack Standard");
       data = dimple.filterData(data, "Channel", "Hypermarkets");
-
+    
       // Create and Position a Chart
       var myChart = new dimple.chart(svg, data);
       myChart.setBounds(60, 30, 500, 300);
       var x = myChart.addCategoryAxis("x", "Month")
       myChart.addMeasureAxis("y", "Unit Sales");
-
+    
       // Order the x axis by date
       x.addOrderRule("Date");
-
+    
       // Min price will be green, middle price yellow and max red
       myChart.addColorAxis("Price", ["green", "yellow", "red"]);
-
+    
       // Add a thick line with markers
       var lines = myChart.addSeries(null, dimple.plot.line);
       lines.lineWeight = 5;
       lines.lineMarkers = true;
-
+    
       // Draw the chart
       myChart.draw();
-
+    
     });
   </script>
 </div>
