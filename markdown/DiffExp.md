@@ -12,7 +12,7 @@ Only genes represented with an adjusted P-value (FDR, False Discovery Rate) < 1e
 For aim this analysis lets use the version of Trinity 5.1 installed at: 
 
 ```shell
-PATH=/LUSTRE/apps/bioinformatica/trinityrnaseq-Trinity-v2.5.1/Analysis/DifferentialExpression/
+DF=/LUSTRE/apps/bioinformatica/trinityrnaseq-Trinity-v2.5.1/Analysis/DifferentialExpression/
 ```
 
 Then,
@@ -20,7 +20,7 @@ Then,
 ```shell
 module load R-3.3.1 
 
-$PATH/run_DE_analysis.pl \
+$DF/run_DE_analysis.pl \
       	  --matrix ${PREFIX_}.${TYPE_RESULTS_}.counts.matrix \
        	 --method edgeR \
        	 --dispersion 0.01 \
@@ -37,11 +37,6 @@ $PATH/run_DE_analysis.pl \
 | Female  | Male   |
 | Female  | Undiff |
 | Male    | Undiff |
-
-
-
-> DF=/LUSTRE/apps/bioinformatica/trinityrnaseq-Trinity-v2.5.1/Analysis/DifferentialExpression/
-
 
 Then, lets run 
 
