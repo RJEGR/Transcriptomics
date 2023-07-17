@@ -6,7 +6,7 @@ A non-guided transcriptome assembly usually aims to the _de novo_ assembly metho
 
 * [Processing Raw libraries ](./markdown/Processing).
 * [Running Trinity ](./markdown/denovo-Assembly).
-* [Transrating Assembly ](./markdown/transrate).
+* [Transrating Assembly ](./markdown/transrate.md).
 * [Annotation ](./markdown/trinotate).
 * [Abundance ](./markdown/RSEM).
 * [Differential Expression ](./markdown/DiffExp).
